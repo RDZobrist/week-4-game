@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Star Wars RPGbz2017</title>
+    <!-- Added link to the jQuery Library -->
+    <link rel="stylesheet" type="text/css" href="assets/css/reset.css">
+    <script src="https://code.jquery.com/jquery-3.1.1.js"></script>
+    <!-- Added a link to Bootstrap-->
+    <link rel="stylesheet" type="text/css" href="assets/css/bsTheme.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+</head>
+</head>
+
+<body>
+    <div class="jumbotron">
+        <h4 class="text-center" id="header">Star Wars RPG</h4>
+        <h6 class="text-center text-muted" id="instructions">Select a Fighter to take on the force of ooposition. You must defeat all three remaining characters - so choose wisely! May the force be with you!</h3>
+    </div>
+    <div class="container">
+	    <div class="container">
+	        <div class="row">
+	            
+	            <div class="col-lg-6 pull-left">
+	                <div class="panel panel-primary">
+	                    <div class="panel-heading text-center preFightPanel">
+	   						 <h3 id="preFightPanel"></h3>
+	   					</div>
+					    <div class="row" id="leftovers">
+						    <p class="preGameArena"></p>
+						<!-- 	    <div class="col-md-3">
+							    	<img src="assets/images/imageObi.jpg" class="charChoices" id="imageObi" value="unsure">
+							    </div>
+							    <div class="col-md-3">
+							    	<img src="assets/images/imageDarth.png" class="charChoices" id="imageDarth" value="dark">
+							    </div>
+							    <div class="col-md-3">
+							    	<img src="assets/images/imageYoda.png" class="charChoices" id="imageYoda" value="jedi">
+							    </div>
+							    <div class="col-md-3">
+							    	<img src="assets/images/imageYtwoDtwo.png" class="charChoices" id="imageYtwoDtwo" value="machine">
+							    </div>
+							    </div> -->
+							   
+							 </div></div>
+		<div class="col-md-4 pull-right">
+		    <div class="panel panel-primary" id="arena">
+		        <div class="panel-heading">
+		        <div class="panel-title">
+			<h3 class="text-center" id="arenal">Arena</h3>
+			<div class="panel-body">
+			<div><p id="fighter"></p></div>
+			<h4 id="enemy">
+			
+			<h4 id="battleStats"></h4>
+		  </div>
+		  </div>
+		  </div>
+		  </div></div>
+		  		<div class="row">
+		    <div class="col-xs-4">
+		        <button class="btn btn-danger btn-lg btn-block" id="attackButton">
+		            <h4>Attack</h4>
+		         </button>
+		    </div>
+		</div>
+
+		</div>
+		</div>
+		    <script type="text/javascript">
+//// Global Variables \\\\
+
+
+Array.prototype.inArrayStarwars = function inArrayStarwars(value){
+	for (i=0; i < this.length; i++){
+		if(this [i] === value){
+			return true;
+			alert("yay");
+		}
+	}
+return false;
+};
+$(document).ready(function(){    
+	$("#arena").hide();
+	$("#attackButton").hide();
+
+
+   
+
+ 
+ 
+ 
+    
+
+     
+var yodaAudio;
+var yTwoAudio;
+var saberAudio;
+var darthAudio;
+var obiAudio;
+
+///// characters \\\\
+var characters = {
+
+
+
+	"obi" : {
+		name: "obi",
+		health: 300,
+		attack: 8,
+		counter: 40,
+		imagePath: "assets/images/imageObi.jpg"
+	},
+
+ 
+	"yoda" : {
+		name: "yoda",
+		health: 360,
+		attack: 7,
+		counter: 40,
+		imagePath: "assets/images/imageYoda.png"
+
+	},
+
+
+	"ytwoDtwo": {
+		name: "ytwoDtwo",
+		health: 240,
+		attack: 8,
+		counter: 30,
+		imagePath: "assets/images/imageYtwoDtwo.png"
+	},
+
+
+	"vader" : {
+		name: "vader",
+		health: 200,
+		attack: 14,
+		counter: 10,
+		imagePath:  "assets/images/imageDarth.png"
+ 
+  }
+ 
+
+};
+
+  var yTwoDtwoDiv = $("<div class='charChoicesDIV' data-name='" + characters.ytwoDtwo + "'>");
+    var yTwoDtwoName = $("<div class='character-name'>").text("YtwoDtwo");
+    var yTwoDtwoImage = $("<img alt='image' class='character-image'>").attr("src", characters.ytwoDtwo.imagePath);
+    var yTwoDtwoHealth = $("<div class='character-health'>").text(characters.ytwoDtwo.health);
+
+var yodaDiv = $("<div class='charChoicesDIV' data-name='" + characters.yoda + "'>");
+    var yodaName = $("<div class='character-name'>").text("Yoda");
+    var yodaImage = $("<img alt='image' class='character-image'>").attr("src", characters.yoda.imagePath);
+    var yodaHealth = $("<div class='character-health'>").text(characters.yoda.health);
+      
+ 
+
+    
+
+ var obiDiv = $("<div class='charChoicesDIV' data-name='" + characters.obi + "'>");
+    var obiName = $("<div class='character-name'>").text("Obi");
+    var obiImage = $("<img alt='image' class='character-image'>").attr("src", characters.obi.imagePath);
+    var obiHealth = $("<div class='character-health'>").text(characters.obi.health);
+   
+
+
+     var darthDiv = $("<div class='charChoicesDIV' data-name='" + characters.vader + "'>");
+    var darthName = $("<div class='character-name'>").text("Darth Vader");
+    var darthImage = $("<img alt='image' class='character-image'>").attr("src", characters.vader.imagePath);
+    var darthHealth = $("<div class='character-health'>").text(characters.vader.health);
+
+
+
+
+
+$("#preFightPanel").html("Characters");
+
+yodaDiv.append(yodaName).append(yodaImage).append(yodaHealth);
+$("#leftovers").append(yodaDiv);
+yTwoDtwoDiv.append(yTwoDtwoName).append(yTwoDtwoImage).append(yTwoDtwoHealth);
+ $("#leftovers").append(yTwoDtwoDiv);
+ obiDiv.append(obiName).append(obiImage).append(obiHealth);
+ $("#leftovers").append(obiDiv);
+ darthDiv.append(darthName).append(darthImage).append(darthHealth);
+ $("#leftovers").append(darthDiv);
+
+
+var round = 1;
+var battlesWon = [];
+var enemyLockerRoom = [];
+var preWarlockerRoom = [];
+var battleVictory;
+var warWon = false;
+var fighterPicked = false;
+var currentFighter = "";
+// var jedi = characters.yoda;
+// var dark = characters.vader;
+// var unsure = characters.obi;
+// var machine = characters.ytwoDtwo;
+
+ $("#attackButton").on("click", function(){
+	for(i = 0; i < characters.obi.attack; i++){
+		--(characters.yoda.health);
+		alert(characters.yoda.health);
+	}
+
+});
+
+
+// was attempting to push image into array upon click, then check if value is one of four values - "dark", "unsure", "jedi", "machine" - already attached to character images. if so, then have that corresponding image = the correct character.name \\\\
+// this will be the function that renders all characters\\
+var letsGo = $(".charChoicesDIV").on("click", function(makeChar){
+	// experiment \\
+	// preWarlockerRoom.push(this);
+	// alert(preWarlockerRoom);
+// render arena panel to html \\
+//  && render attack button to html \\
+	$("#arena").show();	$("#attackButton").show();
+
+	
+
+
+	
+
+	
+
+	// send chosen fighter to arena, rendering character panel to Enemy panel
+        $("#fighter").append(this);
+        alert("Nice Selection! Now you must carefully choose your first opponent. Remember - you're going to have to defeat everyone to win the game.");
+     
+ 
+
+        $(leftovers.children).animate({right: '900px'});
+        $(leftovers.children).removeClass("charChoices").addClass("currentEnemy");
+        $(leftovers.children).animate({left: '-10px'});
+        $("#preFightPanel").html("Enemies");
+      
+
+
+    });
+  	
+  });
+</script>
+
+
+</html>
+
+
+
+	
+
+
+</script>
