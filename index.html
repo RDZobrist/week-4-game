@@ -109,6 +109,7 @@ var characters = {
 		attack: 8,
 		counter: 40,
 		imagePath: "assets/images/imageObi.jpg"
+				
 	},
 
  
@@ -152,7 +153,7 @@ var characters = {
 
 
 // configuring character Yoda's div \\
-var yodaDiv = $("<div class='charChoicesDIV yoda' data-name=yoda' value='jedi'" + characters.yoda + "'>");
+var yodaDiv = $("<div class='charChoicesDIV yoda' data-name=yoda'" + characters.yoda + "'>");
     var yodaName = $("<div class='character-name' id='jedi'>").text("Yoda");
     var yodaImage = $("<img alt='image' class='character-image'>").attr("src", characters.yoda.imagePath);
     var yodaHealth = $("<div class='character-health'>").text(characters.yoda.health);
@@ -162,7 +163,7 @@ var yodaDiv = $("<div class='charChoicesDIV yoda' data-name=yoda' value='jedi'" 
     
 
 // configuring character Obi's div\\
- var obiDiv = $("<div class='charChoicesDIV obi' data-name=obiDiv'" + characters.obi + "'>");
+ var obiDiv = $("<div class='charChoicesDIV obi' data-name=obi'" + characters.obi + "'>");
     var obiName = $("<div class='character-name'>").text("Obi");
     var obiImage = $("<img alt='image' class='character-image'>").attr("src", characters.obi.imagePath);
     var obiHealth = $("<div class='character-health'>").text(characters.obi.health);
@@ -265,20 +266,11 @@ $("#openingMsg").hide();
 $("#enemyreadyString").on("click", function(){
 	$(".hider").show();
 	$("#arena").show();
-	$("#attackButton").show();
 	$("#instructions").slideUp("fast");
 	$("#preFightPanel").addClass("enemyPanel");
 })
        
-console.log(characters.keys);
-        // $(preFightPanel.children).removeClass("charChoices").addClass("currentEnemy");
-        // $(preFightPanel.children).animate({left: '-10px'});
-     function checkFighter(value){
-	if (fighterlockerRoom.indexOf( yodaDiv === 0)){
-		console.log("this is working");
-	}
-}
-      
+    
 
 
     });
