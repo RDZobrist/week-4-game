@@ -2,31 +2,13 @@
         color: #f4e842;
         font-weight: lighter;
     }
-    
-    #imageYtwoDtwo {
-        max-height: 150px;
-        max-width: 150px;
-        margin: 15px;
+
+    #openingMsg {
+      color: #f4e842;
+        font-weight: lighter;
+
     }
-    
-    #imageDarth {
-        max-height: 150px;
-        max-width: 150px;
-        margin: 15px;
-    }
-    
-    #imageYoda {
-        max-height: 150px;
-        max-width: 150px;
-        margin: 15px;
-        position: relative;
-    }
-    
-    #imageObi {
-        max-height: 150px;
-        max-width: 150px;
-        margin: 15px;
-    }
+
     
     #header {
         font-size: 40px;
@@ -35,16 +17,16 @@
     }
 .character {
   width: 153px;
-  margin: 0px 10px 0px 10px;
+  margin: 0px 0px 0px 5px;
   cursor: pointer;
-  display: inline-block;
+  
 }
 .character-image {
   border: 0 none;
   display: block;
   margin-left: auto;
   margin-right: auto;
-  height: 200px;
+  height: 150px;
 }
 .character-name {
   text-align: center;
@@ -55,4 +37,24 @@
 }
 .character-health {
   text-align: center;
+}
+#attackButton {
+    margin-left: 190px;
+    margin-right: 190px;
+}
+
+
+#instructions, 
+ {
+    padding: 50px;
+    font-size: 30px;
+    display: none;
+       padding: 5px;
+    text-align: center;
+    
+}
+
+.enemyPanel {
+  color: red;
+  font-size: 40px;
 }
