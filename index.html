@@ -14,17 +14,22 @@
 </head>
 
 <body>
+    <div class="fade"></div>
     <div class="jumbotron">
         <h4 class="text-center" id="header">Star Wars RPG</h4>
+        <h6 class="text-center" id="enemyMsg">Carefully select your first opponent. Click the green button when you're ready!</h6>
+        <h6 class="text-center" id="loser" style="font-size: 30px;">You Lost - Sorry.<br> Take some time and devise a better strategy.<br>  Regroup.<br> The Universe needs you!!!"</h6>
         <h6 class="text-center text-muted" id="openingMsg">Please select a fighter. The remaining characters will become your foes. So please choose wisely!</h6>
+        <h4 class="text-center text-success" id="victory1">Great Job! The Universe is going nuts, SuperNova Nuts!!!! Only two more to go - you got this! Think about your next move, press the green button when you're ready.Then click the next foe to send him in. Good Luck.</h4>
+        <h4 class="text-center text-success" id="victory2">WOW! You're so close!!! Keep it Up</h4>
         <h6 class="text-center text-muted toggleBox" id="instructions" style="position: relative; "><br>Nice Selection! Now you must carefully choose your first opponent. Remember - you will have to defeat everyone to win the game.<br>So choose wisely.<br>May the force be with you!<br><div class="text-center">Click<div class="text-success" id="enemyreadyString" style="font-size: 22px;">me</div>when ready!</div></h3>
     </div>
     <div class="container">
 	    <div class="container">
 	        <div class="row hider">
 	            
-	            <div class="col-lg-6 pull-left preGamejitter">
-	                <div class="panel panel-primary">
+	            <div class="col-lg-6 pull-left" id="charPanel">
+	                <div class="panel panel-primary" >
 	                    <div class="panel-heading text-center preFightPanel">
 	   						 <h3 id="preFightPanel"><div id="instructions"></div></h3>
 	   					</div>
@@ -41,7 +46,7 @@
 							    <div class="col-md-3">
 							    	<!-- <img src="assets/images/imageYoda.png" class="charChoices" id="imageYoda" value="jedi"> -->
 							    </div>
-							    <div class="col-md-3">
+							    <div class="col-md-3 delete">
 							    	<!-- <img src="assets/images/imageYtwoDtwo.png" class="charChoices" id="imageYtwoDtwo" value="machine"> -->
 							    </div>
 							    </div>
@@ -54,8 +59,8 @@
 		        <div class="panel-title">
 			<h3 class="text-center" id="arenal">Arena</h3>
 			<div class="panel-body">
-			<div><p id="fighter"></p></div>
-			<h4 id="enemy">
+			<div class="enemyLot"><p id="enemySpot"></p></div>
+		
 			
 			<h4 id="battleStats"></h4>
 		  </div>
@@ -67,34 +72,44 @@
 		        <button class="btn btn-danger btn-lg btn-block" id="attackButton">
 		            <h4>Attack</h4>
 		         </button>
+		            <button class="btn btn-success btn-lg btn-block" id="enemyreadyButton">
+		            <h4 id="buttonText"></h4>
+		         </button>
 		    </div>
 		</div>
 
-		</div>
-		</div>
-		    <script type="text/javascript">
-//// Global Variables \\\\
+    
+   
+   
+
+  </div>
+
+</section>
+		
+<script type="text/javascript">
+  
+  
+
+/// Global Variables \\\\
+
+var battlesWon = [];
+var enemyLockerRoom = [];
+var fighterlockerRoom = [];
+var battleVictory;
+var currentFighter;
+var currentEnemy;
+var warWon = false;
+var fighterPicked = false;
+var enemyPicked = false;
 
 
 $(document).ready(function(){    
-	$("#arena").hide();
-	$("#attackButton").hide();
-	$("#enemyreadyButton").hide();
+	$("#arena, #attackButton, #enemyreadyButton, #instructions,  #enemyMsg, #loser, #victory2, #victory1").hide();
 	$("#preFightPanel").html("Characters");
-	$("#instructions").hide();
-
-
-   
-
- 
- 
- 
-    
-
-     
+	
 var yodaAudio;
 var yTwoAudio;
-var saberAudio;
+var saberAudio = new Audio('assets/Lightsaber.mp3');
 var darthAudio;
 var obiAudio;
 
@@ -119,6 +134,9 @@ var characters = {
 		attack: 7,
 		counter: 40,
 		imagePath: "assets/images/imageYoda.png"
+		// yodaWar: function(){
+		// 	if ()
+		// }
 
 	},
 
@@ -146,14 +164,14 @@ var characters = {
 
 
 // configuring character YtwoDtwo's div\\
-  var yTwoDtwoDiv = $("<div class='charChoicesDIV ytwoDtwo' data-name=ytwoDtwo'" + characters.ytwoDtwo + "'>");
+  var yTwoDtwoDiv = $("<div class='charChoicesDIV ytwoDtwo'id='machine' data-name=ytwoDtwo'" + characters.ytwoDtwo + "'>");
     var yTwoDtwoName = $("<div class='character-name'>").text("YtwoDtwo");
     var yTwoDtwoImage = $("<img alt='image' class='character-image'>").attr("src", characters.ytwoDtwo.imagePath);
     var yTwoDtwoHealth = $("<div class='character-health'>").text(characters.ytwoDtwo.health);
 
 
 // configuring character Yoda's div \\
-var yodaDiv = $("<div class='charChoicesDIV yoda' data-name=yoda'" + characters.yoda + "'>");
+var yodaDiv = $("<div class='charChoicesDIV yoda' id='jedi' data-name=yoda" + characters.yoda + "'>");
     var yodaName = $("<div class='character-name' id='jedi'>").text("Yoda");
     var yodaImage = $("<img alt='image' class='character-image'>").attr("src", characters.yoda.imagePath);
     var yodaHealth = $("<div class='character-health'>").text(characters.yoda.health);
@@ -163,14 +181,14 @@ var yodaDiv = $("<div class='charChoicesDIV yoda' data-name=yoda'" + characters.
     
 
 // configuring character Obi's div\\
- var obiDiv = $("<div class='charChoicesDIV obi' data-name=obi'" + characters.obi + "'>");
+ var obiDiv = $("<div class='charChoicesDIV obi' id='unsure' data-name=obi'" + characters.obi + "'>");
     var obiName = $("<div class='character-name'>").text("Obi");
     var obiImage = $("<img alt='image' class='character-image'>").attr("src", characters.obi.imagePath);
     var obiHealth = $("<div class='character-health'>").text(characters.obi.health);
    
 
 // configuring character darth vader's Div \\
-     var darthDiv = $("<div class='charChoicesDIV darth' data-name=darth'" + characters.vader + "'>");
+     var darthDiv = $("<div class='charChoicesDIV darth' id='dark' data-name=vader'" + characters.vader + "'>");
     var darthName = $("<div class='character-name'>").text("Darth Vader");
     var darthImage = $("<img alt='image' class='character-image'>").attr("src", characters.vader.imagePath);
     var darthHealth = $("<div class='character-health'>").text(characters.vader.health);
@@ -186,30 +204,12 @@ yTwoDtwoDiv.append(yTwoDtwoName).append(yTwoDtwoImage).append(yTwoDtwoHealth);
  $("#leftovers").append(darthDiv);
 
 
-var round = 1;
-var battlesWon = [];
-var enemyLockerRoom = [];
-var fighterlockerRoom = [];
-var battleVictory;
-var warWon = false;
-var fighterPicked = false;
-var currentFighter = "";
-// var jedi = characters.yoda;
-// var dark = characters.vader;
-// var unsure = characters.obi;
-// var machine = characters.ytwoDtwo;
+var jedi = characters.yoda;
+var dark = characters.vader;
+var unsure = characters.obi;
+var machine = characters.ytwoDtwo;
 
- $("#attackButton").on("click", function(){
- 	round++;
-	for(i = 0; i < characters.obi.counter; i++){
-		--(characters.yoda.health);
-		yodaHealth.text(characters.yoda.health);
-		// yodaHealth targets the 
-		console.log(characters.yoda.health);
-		
-	}
 
-	})
 
 
 
@@ -221,33 +221,136 @@ var currentFighter = "";
 
 // user chooses fighter \\
  $(".charChoicesDIV").on("click", function(){
-fighterlockerRoom.push(this);
-var currentFighter = $(this).attr('data-name');
-alert(currentFighter);
+ 	$("#buttonText").text("I'm ready to choose my opponent.");
+ 	
+
+ 	
+if(fighterPicked === false){
+var currentFighter = $(this).attr('id');
+
+if (currentFighter === "jedi"){
+	currentFighter = characters.yoda;
+}
+if (currentFighter === "machine"){
+	currentFighter = characters.ytwoDtwo;
+}
+if (currentFighter === "dark"){
+	currentFighter = characters.vader;
+}
+if (currentFighter === "unsure"){
+	currentFighter = characters.obi;
+}
 
 
+}
 
-
+// remove opening message from DOM \\
 $("#openingMsg").hide();
 
 
 // send chosen fighter to arena, rendering character panel to Enemy panel
-        $("#arena").append(this);
-        $("#preFightPanel").html("Enemies");
+ $("#arena").append(this);
+       
+ // send remaining characters to enemyLockerRoom array \\
+ $(leftovers.children).addClass("enemy");
+enemyLockerRoom.push(leftovers.children);
+ // change panel heading to "Enemies" \\
+   $("#preFightPanel").html("Enemies");
         
+// animating instructions \\
+	if(fighterPicked === false && enemyPicked === false){
+    $("#instructions").slideDown("slow");
+     // clearing the screen \\
+	$(".hider").hide();
+
+ $(".enemy").on("click", function(){
+ 	$("#enemySpot").append(this);
+ 	if(enemyPicked === false){
+ 	var currentEnemy = $(this).attr("id");
+ 	if(currentEnemy === "jedi"){
+ 		currentEnemy = characters.yoda;
+ 	}
+ 	if(currentEnemy === "unsure"){
+ 		currentEnemy = characters.obi;
+ 	}
+ 	if (currentEnemy === "machine"){
+ 		currentEnemy = characters.ytwoDtwo;
+ 	}
+ 	if(currentEnemy === "dark"){
+ 		currentEnemy = characters.vader;
+ 	}
+ 	
+ 	enemyPicked = true;
+ 	$("#attackButton").show();
+ 	var round = 0;
+ 	$("#attackButton").on("click", function(){
+ 		
+
+round++;
+var roundd = currentFighter.attack * round;
+
+ 		if(warWon === false){
+ 			for (i=0; i < currentEnemy.counter; i++){
+ 				--(currentFighter.health);
+ 			
+ 			}
+ 			for (j = 0; j < roundd; j++){
+ 				--(currentEnemy.health);
+ 			}
+ 				
+ 				yodaHealth.text(characters.yoda.health);
+ 				obiHealth.text(characters.obi.health);
+ 				yTwoDtwoHealth.text(characters.ytwoDtwo.health);
+ 				darthHealth.text(characters.vader.health);
+
+ 				if (currentFighter.health < 1){
+ 					$(".hider").hide();
+ 					$("#enemyMsg").hide();
+ 					$("#loser").slideDown("slow");
+ 					$("#enemyreadyButton").show();
+ 					
+ 				}
+ // ----------->				// was havin a very hard time reassingning currentEnemy \\<-----------
+// --------> 				// once the first one died so the game could \\				<-----------------------
+ 				// 				continue. I tried so many things it was crazy, started to \\\
+ 						// \\wonder if I set the game up wrong, was stubborn and wouldnt quit\\\
+ 				// then I ran out of time. 
+ 				if (currentEnemy.health < 1){
+ 					$("#enemySpot").remove();
+
+ 					
+ 				
+ 					
+''
+ 					$("#loser, #enemyMsg, #arena, #attackButton").hide();
+ 					$("#victory1").slideDown("slow");
+ 					$("#enemyreadyButton").show();
+ 					$(".enemy").addClass("enemyoptions2");
+ 					
 
 
-         // animating instructions \\
-         if(fighterPicked === false){
-        $("#instructions").slideDown("slow");
-        // clearing the screen \\
-        $("#arena").hide();
-        $("#attackButton").hide();
-         $(".hider").hide();
+ 				}
+$("#enemyreadyButton").on("click", function(){
+	$(".hider").hide();
+	$("#victory1").slideUp("fast");
+	$(".hider, #arena, #attackButton").show();
 
 
 
-        if(fighterlockerRoom.length > 0){
+
+})
+ 			
+ 		}
+ 	})
+ }
+ })
+
+
+	   
+
+ 
+
+        if(enemyLockerRoom.length > 0){
 	fighterPicked = true;}
 }
 
@@ -264,20 +367,17 @@ $("#openingMsg").hide();
      
  
 $("#enemyreadyString").on("click", function(){
-	$(".hider").show();
-	$("#arena").show();
-	$("#instructions").slideUp("fast");
-	$("#preFightPanel").addClass("enemyPanel");
+	$(".hider, #arena, #enemyMsg").show();
+		$("#instructions").slideUp("fast");
+	$("#charPanel").addClass("preGamejitter");
+
 })
        
     
 
 
-    });
-
-  	
-  </script>
-
+    });  </script>
+</body>
 
 </html>
 
@@ -286,4 +386,5 @@ $("#enemyreadyString").on("click", function(){
 	
 
 
-</script>
+<
+

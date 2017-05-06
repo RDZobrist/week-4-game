@@ -1,9 +1,11 @@
-    #instructions {
-        color: #f4e842;
-        font-weight: lighter;
-    }
+ 
 
-    #openingMsg {
+    #openingMsg, 
+    #instructions,
+    #enemyMsg,
+    #loser,
+    #victory1,
+    #victory2 {
       color: #f4e842;
         font-weight: lighter;
 
@@ -54,8 +56,12 @@
     
 }
 
-/*
+
 .preGamejitter  {
-  background: red;
+  background: darkred;
   margin-top: 20px;
-}*/
+
+}
+.enemyLot  {
+  background-color: darkred;
+}
