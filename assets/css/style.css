@@ -1,67 +1,78 @@
- 
+#openingMsg,
+#instructions,
+#enemyMsg,
+#loser,
+#victory1,
+#victory2 {
+    color: #f4e842;
+    font-weight: lighter;
+}
 
-    #openingMsg, 
-    #instructions,
-    #enemyMsg,
-    #loser,
-    #victory1,
-    #victory2 {
-      color: #f4e842;
-        font-weight: lighter;
+#arena {
+  padding: 5px;
+  padding-left: auto;
+  padding-right: auto;
+}
 
-    }
 
-    
-    #header {
-        font-size: 40px;
-        color: #f4e842;
-        font-weight: bold;
-    }
+#header {
+    font-size: 40px;
+    color: #f4e842;
+    font-weight: bold;
+}
+
 .character {
-  width: 153px;
-  margin: 0px 0px 0px 5px;
-  cursor: pointer;
-  
+    width: 153px;
+    margin: 0px 0px 0px 5px;
+    cursor: pointer;
 }
+
 .character-image {
-  border: 0 none;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  height: 150px;
+    border: 0 none;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    height: 150px;
 }
+
 .character-name {
-  text-align: center;
-  text-transform: capitalize;
-  line-height: 30px;
-  font-family: 'Itim', cursive;
-  font-size: 20px;
+    text-align: center;
+    text-transform: capitalize;
+    line-height: 30px;
+    font-family: 'Itim', cursive;
+    font-size: 20px;
 }
+
 .character-health {
-  text-align: center;
-}
-#attackButton {
-    margin-left: 190px;
-    margin-right: 190px;
+    text-align: center;
 }
 
 
-#instructions, 
- {
+
+
+#instructions,
+{
     padding: 50px;
     font-size: 30px;
     display: none;
-       padding: 5px;
+    padding: 5px;
     text-align: center;
-    
 }
 
 
-.preGamejitter  {
-  background: darkred;
-  margin-top: 20px;
-
+.preGamejitter {
+    background: darkred;
+    margin-top: 20px;
 }
-.enemyLot  {
-  background-color: darkred;
+
+.enemyLot {
+    background-color: darkred;
+}
+
+p.enemySpot  {
+  background-color: #f72a48;
+}
+
+#attackButton  {
+  margin-left: 75%;
 }

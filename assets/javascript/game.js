@@ -1,3 +1,7 @@
+// my debuger 
+"use strict"
+
+
 /// Global Variables \\\\
 var battlesWon = [];
 var enemyLockerRoom = [];
@@ -5,279 +9,235 @@ var fighterlockerRoom = [];
 var battleVictory;
 var currentFighter;
 var currentEnemy;
+var currentEnemy2;
+var victories = 0;
+var round = 1;
 var warWon = false;
 var fighterPicked = false;
 var enemyPicked = false;
 $(document).ready(function() {
-     $("#arena, #attackButton, #enemyreadyButton, #instructions,  #enemyMsg, #loser, #victory2, #victory1").hide();
-     $("#preFightPanel").html("Characters");
 
-     var yodaAudio;
-     var yTwoAudio;
-     var saberAudio = new Audio('assets/Lightsaber.mp3');
-     var darthAudio;
-     var obiAudio;
-     ///// characters \\\\
-     var characters = {
-          "obi": {
-               name: "obi",
-               health: 300,
-               attack: 8,
-               counter: 40,
-               imagePath: "assets/images/imageObi.jpg"
+    var saberAudio = new Audio('assets/Lightsaber.mp3');
 
-          },
+    // Character constructor function 
+    function Character(name, healthP, attackP, counterP, imagePath, id) {
+        this.name = name;
+        this.healthP = healthP;
+        this.attackP = attackP;
+        this.counterP = counterP;
+        this.imagePath = imagePath
+        this.id = id;
+        this.counterBlow = function(enemyCounter, healthP) {
 
-          "yoda": {
-               name: "yoda",
-               health: 360,
-               attack: 7,
-               counter: 40,
-               imagePath: "assets/images/imageYoda.png"
-                    // yodaWar: function(){
-                    // 	if ()
-                    // }
-          },
-          "ytwoDtwo": {
-               name: "ytwoDtwo",
-               health: 240,
-               attack: 8,
-               counter: 30,
-               imagePath: "assets/images/imageYtwoDtwo.png"
-          },
-          "vader": {
-               name: "vader",
-               health: 200,
-               attack: 14,
-               counter: 10,
-               imagePath: "assets/images/imageDarth.png"
+            this.healthP = this.healthP - currentEnemy.counterP;
 
-          }
 
-     };
-     // configuring character YtwoDtwo's div\\
-     var yTwoDtwoDiv = $("<div class='charChoicesDIV ytwoDtwo'id='machine' data-name=ytwoDtwo'" + characters.ytwoDtwo + "'>");
-     var yTwoDtwoName = $("<div class='character-name'>").text("YtwoDtwo");
-     var yTwoDtwoImage = $("<img alt='image' class='character-image'>").attr("src", characters.ytwoDtwo.imagePath);
-     var yTwoDtwoHealth = $("<div class='character-health'>").text(characters.ytwoDtwo.health);
-     // configuring character Yoda's div \\
-     var yodaDiv = $("<div class='charChoicesDIV yoda' id='jedi' data-name=yoda" + characters.yoda + "'>");
-     var yodaName = $("<div class='character-name' id='jedi'>").text("Yoda");
-     var yodaImage = $("<img alt='image' class='character-image'>").attr("src", characters.yoda.imagePath);
-     var yodaHealth = $("<div class='character-health'>").text(characters.yoda.health);
+        };
+        this.attack = function(enemyHealthP, attackP) {
+
+            this.attackP = this.attackP * round;
+            currentEnemy.healthP = currentEnemy.healthP - this.attackP;
+
+
+        }
+
+        this.renderCharacter = function(name, health, imagePath) {
+            this.div = $("<div class='characterChoices', id=" + "'" + this.id + "'" + 'data-name=' + "'" + this.id + "'" + '>"');
+            this.badge = $("<div class='character-name', id=" + this.id + '>"').text(this.name + "  " + this.healthP);
+            this.image = $("<img alt='image' class='character'>").attr("src", this.imagePath);
+            this.characterDIV = $(this.div).append(this.image).append(this.badge);
 
 
 
-     // configuring character Obi's div\\
-     var obiDiv = $("<div class='charChoicesDIV obi' id='unsure' data-name=obi'" + characters.obi + "'>");
-     var obiName = $("<div class='character-name'>").text("Obi");
-     var obiImage = $("<img alt='image' class='character-image'>").attr("src", characters.obi.imagePath);
-     var obiHealth = $("<div class='character-health'>").text(characters.obi.health);
-
-     // configuring character darth vader's Div \\
-     var darthDiv = $("<div class='charChoicesDIV darth' id='dark' data-name=vader'" + characters.vader + "'>");
-     var darthName = $("<div class='character-name'>").text("Darth Vader");
-     var darthImage = $("<img alt='image' class='character-image'>").attr("src", characters.vader.imagePath);
-     var darthHealth = $("<div class='character-health'>").text(characters.vader.health);
-     // deploying character divs - image, name, health - to html \\
-     yodaDiv.append(yodaName).append(yodaImage).append(yodaHealth);
-     $("#leftovers").append(yodaDiv);
-     yTwoDtwoDiv.append(yTwoDtwoName).append(yTwoDtwoImage).append(yTwoDtwoHealth);
-     $("#leftovers").append(yTwoDtwoDiv);
-     obiDiv.append(obiName).append(obiImage).append(obiHealth);
-     $("#leftovers").append(obiDiv);
-     darthDiv.append(darthName).append(darthImage).append(darthHealth);
-     $("#leftovers").append(darthDiv);
-     var jedi = characters.yoda;
-     var dark = characters.vader;
-     var unsure = characters.obi;
-     var machine = characters.ytwoDtwo;
-     // was attempting to push image into array upon click, then check if value is one of four values - "dark", "unsure", "jedi", "machine" - already attached to character images. if so, then have that corresponding image = the correct character.name \\\\
-     // this will be the function that renders all characters\\
-     // user chooses fighter \\
-     $(".charChoicesDIV").on("click", function() {
-          $("#buttonText").text("I'm ready to choose my opponent.");
+        }
 
 
-          if (fighterPicked === false) {
-               var currentFighter = $(this).attr('id');
-               if (currentFighter === "jedi") {
-                    currentFighter = characters.yoda;
-               }
-               if (currentFighter === "machine") {
-                    currentFighter = characters.ytwoDtwo;
-               }
-               if (currentFighter === "dark") {
-                    currentFighter = characters.vader;
-               }
-               if (currentFighter === "unsure") {
-                    currentFighter = characters.obi;
-               }
-          }
-          // remove opening message from DOM \\
-          $("#openingMsg").hide();
-          // send chosen fighter to arena, rendering character panel to Enemy panel
-          $("#arena").append(this);
+    };
 
-          // send remaining characters to enemyLockerRoom array \\
-          $(leftovers.children).addClass("enemy");
-          enemyLockerRoom.push(leftovers.children);
-          // change panel heading to "Enemies" \\
-          $("#preFightPanel").html("Enemies");
+    // initialize character objects
+    const obi = new Character("obi", 300, 8, 40, "assets/images/imageObi.jpg", "unsure");
+    const yoda = new Character("yoda", 380, 7, 40, "assets/images/imageYoda.png", "jedi");
+    const ytwoDtwo = new Character("ytwoDtwo", 200, 8, 30, "assets/images/imageYtwoDtwo.png", "machine");
+    const vader = new Character("vader", 200, 14, 10, "assets/images/imageDarth.png", "dark");
 
-          // animating instructions \\
-          if (fighterPicked === false && enemyPicked === false) {
-               $("#instructions").slideDown("slow");
-               // clearing the screen \\
-               $(".hider").hide();
-               $(".enemy").on("click", function() {
-                    $("#enemySpot").append(this);
-                    $(leftovers.children).removeClass("enemy").addClass("enemy2wo");
-                    if (enemyPicked === false) {
-                         var currentEnemy = $(this).attr("id");
-                         alert(currentEnemy);
-                         if (currentEnemy === "jedi") {
-                              currentEnemy = characters.yoda;
-                         }
-                         if (currentEnemy === "unsure") {
-                              currentEnemy = characters.obi;
-                         }
-                         if (currentEnemy === "machine") {
-                              currentEnemy = characters.ytwoDtwo;
-                         }
-                         if (currentEnemy === "dark") {
-                              currentEnemy = characters.vader;
-                         }
+    // hide unneccessary elements 
+    $("#arena, #attackButton, #enemyreadyButton, #instructions,  #enemyMsg, #loser, #victory2, #victory1").hide();
 
-                         enemyPicked = true;
-                         $("#attackButton").show();
-                         var round = 0;
-                         var victories = 0;
-                         $("#attackButton").on("click", function() {
-
-                              round++;
-                              var roundd = currentFighter.attack * round;
-                              if (warWon === false) {
-                                   for (i = 0; i < currentEnemy.counter; i++) {
-                                        --(currentFighter.health);
-
-                                   }
-                                   for (j = 0; j < roundd; j++) {
-                                        --(currentEnemy.health);
-                                   }
-
-                                   yodaHealth.text(characters.yoda.health);
-                                   obiHealth.text(characters.obi.health);
-                                   yTwoDtwoHealth.text(characters.ytwoDtwo.health);
-                                   darthHealth.text(characters.vader.health);
-                                   if (currentFighter.health < 1) {
-                                        $(".hider").hide();
-                                        $("#enemyMsg").hide();
-                                        $("#loser").slideDown("slow");
-                                        $("#enemyreadyButton").show();
-
-                                   }
-                                   // ----------->				// was havin a very hard time reassingning currentEnemy \\<-----------
-                                   // --------> 				// once the first one died so the game could \\				<-----------------------
-                                   // 				continue. I tried so many things it was crazy, started to \\\
-                                   // \\wonder if I set the game up wrong, was stubborn and wouldnt quit\\\
-                                   // then I ran out of time. 
-                                   if (currentEnemy.health < 1) {
-                                        victories++;
-                                        $("#enemySpot").remove();
-                                        $("#attackButton").addClass("roundtwoBtn");
+    // render characters to screen
+    obi.renderCharacter();
+    yoda.renderCharacter();
+    vader.renderCharacter();
+    ytwoDtwo.renderCharacter();
+    $("#preFightPanel").append(obi.characterDIV, yoda.characterDIV, vader.characterDIV, ytwoDtwo.characterDIV);
+    // push all characters to array 
+    enemyLockerRoom.push(obi, yoda, vader, ytwoDtwo);
 
 
+    // +++ TESTING and DEBUGGING +++
+    console.log(enemyLockerRoom.length);
 
-                                        ''
-                                        $("#loser, #enemyMsg, #arena, #attackButton").hide();
-                                        $("#victory1").slideDown("slow");
-                                        $("#enemyreadyButton").show();
-                                        $(".enemy").addClass("enemyoptions2");
+    $(".characterChoices").on("click", function() {
 
-                                   }
-                                   $("#enemyreadyButton").on("click", function() {
-                                        $(".hider").hide();
-                                        $("#victory1").slideUp("fast");
-                                        $(".hider, #arena, #attackButton").show();
-                                   })
-                                   var enemytwoPkd = false;
-                                   $(".enemy2wo").on("click", function() {
-                                        var enemyRndtwo = $(this).attr('id');
-                                        console.log(enemyRndtwo);
-                                        currentEnemy = enemyRndtwo;
-                                        if (warWon === false && enemytwoPkd === false) {
-                                             if (currentEnemy === "jedi") {
-                                                  currentEnemy = characters.yoda;
-                                             }
-                                             if (currentEnemy === "unsure") {
-                                                  currentEnemy = characters.obi;
-                                             }
-                                             if (currentEnemy === "machine") {
-                                                  currentEnemy = characters.ytwoDtwo;
-                                             }
-                                             if (currentEnemy === "dark") {
-                                                  currentEnemy = characters.vader;
-                                             }
+        let j = 0;
 
-                                             enemytwoPkd = true;
-                                             console.log(currentEnemy);
-                                             // console.log(currentEnemy.health);
-                                             console.log("this is the: " + round);
-                                             $(".roundtwoBtn").on("click", function() {
-                                                  round++;
-                                                  console.log("cureent counter: " + currentEnemy.counter);
-                                                  console.log("this is the fighter attack: " + currentFighter.attack);
-                                                  var rounddd = currentFighter.attack * round;
-                                                  if (warWon === false) {
-                                                       for (i = 0; i < currentEnemy.counter; i++) {
-                                                            --(currentFighter.health);
+        if (!(fighterPicked)) {
 
-                                                       }
-                                                       for (j = 0; j < rounddd; j++) {
-                                                            --(currentEnemy.health);
-                                                       }
+            let currentFighter = $(this).attr('data-name');
+            alert(currentFighter);
 
-                                                       yodaHealth.text(characters.yoda.health);
-                                                       obiHealth.text(characters.obi.health);
-                                                       yTwoDtwoHealth.text(characters.ytwoDtwo.health);
-                                                  }
-                                                  darthHealth.text(characters.vader.health);
 
-                                             })
-                                             if (currentFighter.health < 1) {
-                                                  warLost = true;
-                                                  $(".hider, .roundtwoBtn, #arena").hide();
-                                                  $("#loser").slideDown("slow");
-                                             }
-                                             if (currentEnemy.health < 1) {
-                                                  victories++;
-                                                  alert(victories);
-                                                  $("#enemySpot").remove();
-                                             }
-                                        }
-                                   })
-                              }
-                         })
+            if (currentFighter === "jedi") {
+                currentFighter = yoda;
+                fighterPicked = true;
+                let idx = enemyLockerRoom.indexOf(yoda);
+                console.log(idx);
+                fighterlockerRoom = enemyLockerRoom.splice(idx, 1);
+                if (fighterPicked && (!(enemyPicked))) {
+                    $('#arena').show().append(this);
+
+                    $(preFightPanel.children).removeClass('characterChoices').addClass('enemy');
+
+
+                } else
+                if (currentFighter === "machine") {
+                    currentFighter = ytwoDtwo;
+                    fighterPicked = true;
+                    let idx = enemyLockerRoom.indexOf(ytwoDtwo);
+                    if (fighterPicked && (!(enemyPicked))) {
+                        $('#arena').show().append(this);
+                        $(preFightPanel.children).removeClass('characterChoices').addClass('enemy');
                     }
-               })
-          }
-     })
 
 
-     if (enemyLockerRoom.length > 0) {
-          fighterPicked = true;
-     }
+                } else if (currentFighter === "dark") {
+                    currentFighter = vader;
+                    fighterPicked = true;
+                    let idx = enemyLockerRoom.indexOf(vader);
+                    fighterlockerRoom = enemyLockerRoom.splice(idx, 1);
+                    if (fighterPicked && (!(enemyPicked))) {
+                        $('#arena').show().append(this);
+
+                        $(preFightPanel.children).removeClass('characterChoices').addClass('enemy');
+                    }
+                }
+            } else {
+                (currentFighter === "unsure")
+                currentFighter = obi;
+                fighterPicked = true;
+                let idx = enemyLockerRoom.indexOf(obi);
+                fighterlockerRoom = enemyLockerRoom.splice(idx, 1);
+                if (fighterPicked && (!(enemyPicked))) {
+                    $('#arena').show().append(this);
+
+                    $(preFightPanel.children).removeClass('characterChoices').addClass('enemy');
+                }
+
+            }
+
+            //             ++++ TESTING and DEBUGGING +++ 
+            // _________________________________________________________
+            console.log('Current Fighter: ' + currentFighter);
+            console.log('preFightPanel: ' + preFightPanel)
+            console.log('enemyLockerRoom ' + enemyLockerRoom.length);
+
+
+
+            $('.enemy').on('click', function() {
+
+                $('#enemySpot1').append(this);
+                $('#attackButton').show();
+
+                if (this.id === "jedi") {
+                    currentEnemy = yoda;
+
+                } else if (this.id === "unsure") {
+                    currentEnemy = obi;
+                } else if (this.id === "machine") {
+                    currentEnemy = ytwoDtwo;
+                } else {
+                    currentEnemy = vader;
+                }
+
+                // +++ TESTING and DEBUGGING +++
+                // _____________________________
+                console.log(currentEnemy.counterP);
+
+                $('.attackButton').on('click', function() {
+
+                    
+                        currentFighter.attack();
+                        currentFighter.counterBlow();
+                        currentFighter.badge.text(currentFighter.healthP);
+                        currentEnemy.badge.text(currentEnemy.healthP);
+
+
+
+                        if (currentFighter.healthP < 1) {
+                            alert('dead')
+                            $('#loser').slideDown('slow');
+
+                        }
+                        if (currentEnemy.healthP < 1) {
+                            $('#enemySpot1').remove();
+                            $('#victory1').slideDown('slow');
+                            $('#enemyreadyButton').show();
+                            currentEnemy = {};
+
+
+
+                        }
+                        round++
+
+                        // +++ TESTING and DEBUGGING +++
+                        // 
+                        // console.log(currentFighter.attack + " | " + currentFighter.counterBlow)
+                        console.log("Round: " + round);
+                        console.log("Current enemy health " + currentEnemy.healthP);
+                    
+                });
+                $('#enemyreadyButton').on('click', function() {
+                    $('.attackButton').removeClass('attackButton').addClass('btnrd2')
+                    $('#victory1').slideUp('fast');
+                    $('#enemyreadyButton').hide();
+                    $(arena.children).removeClass('enemy');
+                    $(arena.children).addClass('enemy2');
+                    
+               
+            });
+            $('.enemy').on('click', function() {
+                    alert(this.id)
+               if (this.id === "jedi") {
+                    currentEnemy = yoda;
+                    currentEnemy.healthP = yoda.healthP;
+                    currentEnemy.badge.text(currentEnemy.healthP);
+
+                } else if (this.id === "unsure") {
+                    currentEnemy = obi;
+                    currentEnemy.enemyHealthP = obi.healthP;
+                    currentEnemy.badge.text(currentEnemy.healthP);
+                } else if (this.id === "machine") {
+                    currentEnemy = ytwoDtwo;
+                    currentEnemy.healthP = ytwoDtwo.healthP;
+                    currentEnemy.badge.text(currentEnemy.healthP);
+                } else {
+                    currentEnemy = vader;
+                    currentEnemy.healthP = vader.healthP;
+                    currentEnemy.badge.text(currentEnemy.healthP);
+                }
+
+                // +++ TESTING and DEBUGGING +++
+                // _____________________________
+                console.log(currentEnemy.counterP);
+
+               
+                $('#enemySpot2').append(this);
+                $('.btnrd2').on('click', function(){
+
+                })
+                // $('#attackButton').on('click', function(){
+                //          alert('step2')
+                // })
+            })});
+        }
+    })
 })
-
-
-
-
-;
-
-
-$("#enemyreadyString").on("click", function() {
-     $(".hider, #arena, #enemyMsg").show();
-     $("#instructions").slideUp("fast");
-     $("#charPanel").addClass("preGamejitter");
-});
