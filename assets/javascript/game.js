@@ -43,7 +43,7 @@ $(document).ready(function() {
 
         this.renderCharacter = function(name, health, imagePath) {
             this.div = $("<div class='characterChoices', id=" + "'" + this.id + "'" + 'data-name=' + "'" + this.id + "'" + '>"');
-            this.badge = $("<div class='character-name'>"').text(this.name + "  " + this.healthP);
+            this.badge = $("<div class='character-name', id=" + this.id + '>"').text(this.name + "  " + this.healthP);
             this.image = $("<img alt='image' class='character'>").attr("src", this.imagePath);
             this.characterDIV = $(this.div).append(this.image).append(this.badge);
 
