@@ -83,7 +83,7 @@ $(document).ready(function() {
         if (!(fighterPicked)) {
 
             let currentFighter = $(this).attr('data-name');
-            
+            alert(currentFighter);
 
 
             if (currentFighter === "jedi") {

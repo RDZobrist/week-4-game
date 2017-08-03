@@ -73,11 +73,6 @@ p.enemySpot  {
   background-color: #f72a48;
 }
 
-.attackButton  {
-  margin: auto;
-}
-
-.container.game  {
-    margin-right: right;
-    margin-left: auto;
+#attackButton  {
+  margin-left: 75%;
 }
